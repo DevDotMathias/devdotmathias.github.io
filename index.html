@@ -1,31 +1,58 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>root@mathias:~#</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css" integrity="sha512-4xo8blKMVCiXpTaLzQSLSw3KFOVPWhm/TRtuPVc4WG6kUgjH6J03IBuG7JZPkcWMxJ5huwaBpOpnwYElP/m6wg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/brands.min.css" integrity="sha512-9YHSK59/rjvhtDcY/b+4rdnl0V4LPDWdkKceBl8ZLF5TB6745ml1AfluEU6dFWqwDw9lPvnauxFgpKvJqp7jiQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-      .fa-brands, .fab { display: inline-block; font-style: normal; font-variant: normal; line-height: 1; text-rendering: auto; font-family: "Font Awesome 6 Brands"; }
-      html, body, .splash-container { height: 100%; }
-      body { background-color: #080e20; color: #fff; }
-      .splash-container { display: flex; align-items: center; justify-content: center; text-align: center; }
-      a { color: #fff; text-decoration: underline dotted; }
-      p { margin-top: 0; }
-      h1 { font-size: 2.5em; margin-bottom: 0.25em; }
-    </style>
-  </head>
-  <body>
-    <div class="splash-container">
-      <div class="splash">
-        <h1><code>root@mathias:~#</code></h1>
-        <p class="splash--links">
-          <a href="https://pawb.fun/@mathias" target="_blank" rel="noopener noreferrer"><i class="fab fa-mastodon" aria-label="Mastodon"></i> fedi</a></li> &middot;
-          <a href="https://github.com/DevDotMathias" target="_blank" rel="nooepener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> github</a> &middot;
-          <a href="mailto:bork@walf.me"><i class="fab fa-usps" aria-label="email"></i> bork@walf.me</a>
-        </p>
-      </div>
-    </div>
-  </body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>root@mathias:~#</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css" integrity="sha512-4xo8blKMVCiXpTaLzQSLSw3KFOVPWhm/TRtuPVc4WG6kUgjH6J03IBuG7JZPkcWMxJ5huwaBpOpnwYElP/m6wg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/brands.min.css" integrity="sha512-9YHSK59/rjvhtDcY/b+4rdnl0V4LPDWdkKceBl8ZLF5TB6745ml1AfluEU6dFWqwDw9lPvnauxFgpKvJqp7jiQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <style>
+            .fa-brands, .fab { display: inline-block; font-style: normal; font-variant: normal; line-height: 1; text-rendering: auto; font-family: "Font Awesome 6 Brands"; }
+            html, body, .splash-container { height: 100%; }
+            body { background-color: #080e20; color: #fff; }
+            .splash-container { display: flex; align-items: center; justify-content: center; text-align: center; }
+            a { color: #fff; text-decoration: underline dotted; }
+            p, h1 { margin-top: 0; }
+            h1 { font-size: 2.5em; margin-bottom: 0.25em; }
+            .splash--clock { border: 1px solid #fff; display: flex; align-items: center; width: fit-content; margin: 2em auto 0; }
+            .splash--clock-label { padding: 0.5em; background-color: #fff; color: #080e20; }
+            .splash--clock-time { padding: 0.5em; flex-grow: 1; /* old browsers without width: fit-content support */ }
+        </style>
+    </head>
+    <body>
+        <div class="splash-container">
+            <div class="splash">
+                <h1><code>root@mathias:~#</code></h1>
+                <p class="splash--links">
+                    <a href="https://pawb.fun/@mathias" target="_blank" rel="noopener noreferrer"><i class="fab fa-mastodon" aria-label="Mastodon"></i> fedi</a></li> &middot;
+                    <a href="https://github.com/DevDotMathias" target="_blank" rel="nooepener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> github</a> &middot;
+                    <a href="mailto:bork@walf.me"><i class="fab fa-usps" aria-label="email"></i> bork@walf.me</a>
+                </p>
+                <div class="splash--clock" aria-live="polite">
+                    <div class="splash--clock-label">walf time</div>
+                    <div class="splash--clock-time"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+        (function() {
+            var fmtDate = new Intl.DateTimeFormat(undefined, { timeZone: 'America/Chicago', weekday: 'short', month: 'short', day: 'numeric' });
+            var fmtTime = new Intl.DateTimeFormat(undefined, { timeZone: 'America/Chicago', hour: 'numeric', minute: 'numeric' });
+            var elClock = document.querySelector('.splash--clock-time');
+            var updateClock = function updateClock() {
+                var dateNow = new Date();
+                elClock.innerText = fmtTime.format(dateNow) + ' (' + fmtDate.format(dateNow) + ')';
+            };
+            if(
+                typeof fmtTime.resolvedOptions === 'function' &&
+                fmtTime.resolvedOptions().timeZone === 'America/Chicago'
+            ){
+                setInterval(updateClock, 1000);
+                updateClock();
+            } else {
+                elClock.innerText = 'unsupported browser, sorry';
+            }
+        })();
+        </script>
+    </body>
 </html>
